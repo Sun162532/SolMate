@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณเปอร์เซ็นต์</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function toggleInputs() {
+            const type = document.getElementById('calculation_type').value;
+            document.getElementById('inputs-vv').style.display = (type === 'v/v') ? 'block' : 'none';
+            document.getElementById('inputs-ww').style.display = (type === 'w/w') ? 'block' : 'none';
+            document.getElementById('inputs-wv').style.display = (type === 'w/v') ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>โปรแกรมคำนวณเปอร์เซ็นต์</h1>
+        <form action="/calculate" method="post">
+            <label for="calculation_type">เลือกสูตรการคำนวณ:</label>
+            <select name="calculation_type" id="calculation_type" onchange="toggleInputs()">
+                <option value="v/v">เปอร์เซ็นต์โดยปริมาตร (%v/v)</option>
+                <option value="w/w">เปอร์เซ็นต์โดยมวล (%w/w)</option>
+                <option value="w/v">เปอร์เซ็นต์โดยมวลต่อปริมาตร (%w/v)</option>
+            </select>
+
+            <!-- ปริมาตร (%v/v) -->
+            <div id="inputs-vv" style="display: block;">
+                <div>
+                    <label for="solute_volume">ปริมาตรของตัวถูกละลาย (มิลลิลิตร):</label>
+                    <input type="number" name="solute_volume" step="0.01">
+                 </div>
+                <div>
+                    <label for="solution_volume">ปริมาตรของสารละลาย (มิลลิลิตร):</label>
+                    <input type="number" name="solution_volume" step="0.01">
+                </div>
+            </div>
+
+            <!-- น้ำหนัก (%w/w) -->
+            <div id="inputs-ww" style="display: none;">
+                <div>
+                    <label for="solute_mass">มวลของตัวถูกละลาย (กรัม):</label>
+                    <input type="number" name="solute_mass" step="0.01">
+                </div>
+                <div>
+                    <label for="solution_mass">มวลของสารละลาย (กรัม):</label>
+                    <input type="number" name="solution_mass" step="0.01">
+                </div>
+            </div>
+
+            <!-- น้ำหนักต่อปริมาตร (%w/v) -->
+            <div id="inputs-wv" style="display: none;">
+                <div>
+                    <label for="solute_mass_wv">มวลของตัวถูกละลาย (กรัม):</label>
+                    <input type="number" name="solute_mass_wv" step="0.01">
+                </div>
+                <div>
+                    <label for="solution_volume_wv">ปริมาตรของสารละลาย (มิลลิลิตร):</label>
+                    <input type="number" name="solution_volume_wv" step="0.01">
+                </div>
+            </div>
+
+
+            <button type="submit">คำนวณ</button>
+        </form>
+
+        <!-- ผลลัพธ์ -->
+        {% if result is not none %}
+        <div class="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
+            <h2>ผลลัพธ์:</h2>
+            <p>{{ result }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
